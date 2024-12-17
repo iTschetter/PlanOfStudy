@@ -1,0 +1,15 @@
+﻿@model Plan
+<div class="">
+    @if (Model?.Lines.Count() > 0)
+    {
+        <small class="navbar-text">
+            <b>Your plan:</b>
+            @Model?.Lines.Sum(x => x.Quantity) item(s)
+            @Model?.ComputeTotalValue().ToString() credits
+        </small>
+    }
+    <a class="btn btn-sm btn-secondary navbar-btn" asp-page="/Plan"
+       asp-route-returnurl="@ViewContext.HttpContext.Request.PathAndQuery()">
+        <i class="fa fa-bars-progress"></i>   <!--class="fa fa-shopping-cart"-->
+    </a>
+</div>

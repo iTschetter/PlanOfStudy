@@ -1,0 +1,32 @@
+﻿@page "/admin/savedplans"
+@inherits OwningComponentBase<ISavedPlanRepository>
+<SavedPlanTable TableTitle="Unactive Saved Plans"
+        SavedPlans="UnactiveSavedPlans" ButtonLabel="Activate" SavedPlanSelected="ActivateSavedPlan" />
+<SavedPlanTable TableTitle="Active Saved Plans"
+       SavedPlans="ActiveSavedPlans" ButtonLabel="Reset" SavedPlanSelected="ResetSavedPlan" />
+<button class="btn btn-info" @onclick="@(e => UpdateData())">Refresh Data</button>
+@code {
+    public ISavedPlanRepository Repository => Service;
+    public IEnumerable<SavedPlan> AllSavedPlans { get; set; } = Enumerable.Empty<SavedPlan>();
+    public IEnumerable<SavedPlan> UnactiveSavedPlans { get; set; }
+        = Enumerable.Empty<SavedPlan>();
+    public IEnumerable<SavedPlan> ActiveSavedPlans { get; set; }
+        = Enumerable.Empty<SavedPlan>();
+    protected async override Task OnInitializedAsync() {
+        await UpdateData();
+    }
+    public async Task UpdateData() {
+        AllSavedPlans = await Repository.SavedPlans.ToListAsync();
+        UnactiveSavedPlans = AllSavedPlans.Where(o => !o.Active);
+        ActiveSavedPlans = AllSavedPlans.Where(o => o.Active);
+    }
+    public void ActivateSavedPlan(int id) => UpdateSavedPlan(id, true);
+    public void ResetSavedPlan(int id) => UpdateSavedPlan(id, false);
+    private void UpdateSavedPlan(int id, bool activateValue) {
+        SavedPlan? o = Repository.SavedPlans.FirstOrDefault(o => o.SavedPlanID == id);
+        if (o != null) {
+            o.Active = activateValue;
+            Repository.SaveSavedPlan(o);
+        }
+    }
+}

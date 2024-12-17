@@ -1,0 +1,50 @@
+﻿<table class="table table-sm table-striped table-bordered">
+    <thead>
+        <tr><th colspan="5" class="text-center">@TableTitle</th></tr>
+        <tr><th colspan="5"></th></tr>
+    </thead>
+    <tbody>
+        @if (SavedPlans?.Count() > 0)
+        {
+            @foreach (SavedPlan o in SavedPlans)
+            {
+                <tr>
+                    <th colspan="5">Saved Plan: @o.Name</th>
+                </tr>
+                <tr>
+                    <th>Course</th>
+                    <th>Quantity</th>
+                    <td>
+                        <button class="btn btn-sm btn-danger"
+                        @onclick="@(e => SavedPlanSelected.InvokeAsync(o.SavedPlanID))">
+                            @ButtonLabel
+                        </button>
+                    </td>
+                </tr>
+                @foreach (PlanLine line in o.Lines)
+                {
+                    <tr>
+                        <td>@line.Course.CourseNumber</td>
+                        <td>@line.Quantity</td>
+                        <td></td>
+                    </tr>
+                }
+                <tr><th colspan="5"></th></tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="4" class="text-center">No Saved Plans</td></tr>
+        }
+    </tbody>
+</table>
+@code {
+    [Parameter]
+    public string TableTitle { get; set; } = "Orders";
+    [Parameter]
+    public IEnumerable<SavedPlan> SavedPlans { get; set; } = Enumerable.Empty<SavedPlan>();
+    [Parameter]
+    public string ButtonLabel { get; set; } = "Ship";
+    [Parameter]
+    public EventCallback<int> SavedPlanSelected { get; set; }
+}

@@ -1,0 +1,12 @@
+﻿@model SavedPlan
+<h2>Save Plan Now:</h2>
+<p>Please enter the name of your plan!</p>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="SavePlan" method="post">
+    <div class="form-group">
+        <label>Plan Name:</label><input asp-for="Name" class="form-control" />
+    </div>
+    <div class="text-center">
+        <input class="btn btn-primary" type="submit" value="Save Plan" />
+    </div>
+</form>

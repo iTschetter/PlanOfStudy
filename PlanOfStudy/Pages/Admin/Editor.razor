@@ -1,0 +1,74 @@
+﻿@page "/admin/courses/edit/{id:long}"
+@page "/admin/courses/create"
+@inherits OwningComponentBase<IPOSRepository>
+<style>
+    div.validation-message {
+        color: rgb(220, 53, 69);
+        font-weight: 500
+    }
+</style>
+<h3 class="bg-@ThemeColor text-white text-center p-1">@TitleText a Course</h3>
+<EditForm Model="Course" OnValidSubmit="SaveCourse">
+    <DataAnnotationsValidator />
+    @if (Course.CourseID != 0)
+    {
+        <div class="form-group">
+            <label>ID</label>
+            <input class="form-control" disabled value="@Course.CourseID" />
+        </div>
+    }
+    <div class="form-group">
+        <label>Course Number</label>
+        <ValidationMessage For="@(() => Course.CourseNumber)" />
+        <InputText class="form-control" @bind-Value="Course.CourseNumber" />
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <ValidationMessage For="@(() => Course.Description)" />
+        <InputText class="form-control" @bind-Value="Course.Description" />
+    </div>
+    <div class="form-group">
+        <label>Category</label>
+        <ValidationMessage For="@(() => Course.Category)" />
+        <InputText class="form-control" @bind-Value="Course.Category" />
+    </div>
+    <div class="form-group">
+        <label>Credits</label>
+        <ValidationMessage For="@(() => Course.Credits)" />
+        <InputNumber class="form-control" @bind-Value="Course.Credits" />
+    </div>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-@ThemeColor">Save</button>
+        <NavLink class="btn btn-secondary" href="/admin/courses">Cancel</NavLink>
+    </div>
+</EditForm>
+@code {
+    public IPOSRepository Repository => Service;
+    [Inject]
+    public NavigationManager? NavManager { get; set; }
+    [Parameter]
+    public long Id { get; set; } = 0;
+    public Course Course { get; set; } = new Course();
+    protected override void OnParametersSet()
+    {
+        if (Id != 0)
+        {
+            Course = Repository.Courses.FirstOrDefault(p => p.CourseID == Id)
+                ?? new();
+        }
+    }
+    public void SaveCourse()
+    {
+        if (Id == 0)
+        {
+            Repository.CreateCourse(Course);
+        }
+        else
+        {
+            Repository.SaveCourse(Course);
+        }
+        NavManager?.NavigateTo("/admin/courses");
+    }
+    public string ThemeColor => Id == 0 ? "primary" : "warning";
+    public string TitleText => Id == 0 ? "Create" : "Edit";
+}

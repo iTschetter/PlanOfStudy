@@ -1,0 +1,24 @@
+﻿@model Course
+<div class="card card-outline-primary m-1 p-1">
+    <div class="bg-faded p-1">
+        <h4>
+            @Model?.CourseNumber
+            <span class="badge rounded-pill bg-primary text-white"
+                  style="float:right">
+                <small>@Model?.Credits.ToString()</small>
+            </span>
+        </h4>
+    </div>
+    <form id="@Model?.CourseID" asp-page="/Plan" method="post">
+        <input type="hidden" asp-for="CourseID" />
+        <input type="hidden" name="returnUrl"
+               value="@ViewContext.HttpContext.Request.PathAndQuery()" />
+        <span class="card-text p-1">
+            @Model?.Description
+            <button type="submit"
+                    class="btn btn-success btn-sm pull-right" style="float:right">
+                Add To Plan
+            </button>
+        </span>
+    </form>
+</div>

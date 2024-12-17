@@ -1,0 +1,11 @@
+﻿@page
+<div class="text-center">
+    <h2>Thanks!</h2>
+    <p>Thanks for saving your plan named: @SavedPlanName</p>
+    <p>Good luck on completing your plan!</p>
+    <a class="btn btn-primary" asp-controller="Home">Return to Planning</a>
+</div>
+@functions {
+    [BindProperty(SupportsGet = true)]
+    public string? SavedPlanName { get; set; }
+}

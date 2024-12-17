@@ -1,0 +1,12 @@
+﻿@model CoursesListViewModel
+@foreach (var p in Model?.Courses ?? Enumerable.Empty<Course>())
+{
+    <partial name="CourseSummary" model="p" />
+}
+<div page-model="@Model?.PagingInfo" page-action="Index" page-classes-enabled="true"
+     page-class="btn" page-class-normal="btn-outline-dark"
+     page-class-selected="btn-primary" page-url-category="@Model?.CurrentCategory!"
+     class="float-end">
+ </div>
+
+ <!--Checked!-->
